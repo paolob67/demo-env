@@ -57,7 +57,7 @@ resource "ibm_is_security_group_rule" "allow_all_outbound" {
 }
 
 # Create an instance (VSI) within the VPC
-resource "ibm_is_instance" "vm" {
+resource "ibm_is_instance" "vsi" {
   name            = var.instance_name
   image           = var.image
   profile         = var.instance_profile
@@ -76,7 +76,7 @@ resource "ibm_is_instance" "vm" {
 # Allocate a public IP address for the VSI
 resource "ibm_is_floating_ip" "fip" {
   name   = "demo-floating-ip"
-  target = ibm_is_instance.vm.primary_network_interface[0].id
+  target = ibm_is_instance.vsi.primary_network_interface[0].id
 }
 
 # Create  sblock storage volume for the VSI
@@ -89,7 +89,7 @@ resource "ibm_is_volume" "block_storage" {
 
 # Attach the storage to the VSI
 resource "ibm_is_instance_volume_attachment" "attach_volume" {
-  instance = ibm_is_instance.vm.id
+  instance = ibm_is_instance.vsi.id
   volume   = ibm_is_volume.block_storage.id
   delete_volume_on_instance_delete = true
 }
@@ -98,12 +98,13 @@ resource "ibm_is_instance_volume_attachment" "attach_volume" {
 resource "ibm_resource_instance" "cos_instance" {
   name     = var.cos_instance_name
   location = var.region
+  plan     = "standard"
   service  = "cloud-object-storage"
 }
 
 # Create a bucket in the COS instance
 resource "ibm_cos_bucket" "object_storage" {
   bucket_name          = var.bucket_name
-  resource_instance_id = data.ibm_resource_instance.cos_instance.id
+  resource_instance_id = ibm_resource_instance.cos_instance.id
   storage_class        = "standard"
 }
