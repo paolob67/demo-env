@@ -1,5 +1,6 @@
 # main.tf
 # remember to set an environment variable with the IBM CLOUD API KEY
+# if not using within IBM CLOUD SCHEMATICS
 # > export IC_API_KEY="ibmcloud_api_key"
 # > terraform plan
 
