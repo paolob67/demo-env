@@ -57,7 +57,7 @@ resource "ibm_is_security_group_rule" "allow_all_outbound" {
 }
 
 # Create an instance (VSI) within the VPC
-resource "ibm_is_instance" "vsi" {
+resource "ibm_is_instance" "vm" {
   name            = var.instance_name
   image           = var.image
   profile         = var.instance_profile
