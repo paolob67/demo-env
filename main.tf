@@ -94,7 +94,7 @@ resource "ibm_is_instance_volume_attachment" "attach_volume" {
   delete_volume_on_instance_delete = true
 }
 
-# Create a Cloud Object Storage (COS) Instance
+# Retrieve information about theCloud Object Storage (COS) Instance
 data "ibm_resource_instance" "cos_instance" {
   name     = var.cos_instance_name
   location = var.region
